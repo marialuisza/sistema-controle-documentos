@@ -7,8 +7,8 @@ def exibir_menu_sistema():
     print('1. Cadastrar documento')
     print('2. Listar documentos')
     print('3. Buscar documento por ID')
-    print('4. Remover documento')
-    print('5. Atualizar documento')
+    print('4. Atualizar documento')
+    print('5. Remover documento')
     print('6. Sair\n')
 
 def voltar_ao_menu():
@@ -97,7 +97,7 @@ def remover_documento():
     else:
         exibir_subtitulo('Rᴇᴍᴏᴠᴇʀ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
         try:
-            id_remover = int(input('Digte o ID do documento que deseja remover: '))
+            id_remover = int(input('Digite o ID do documento que deseja remover: '))
             encontrado= False
             for documento in documentos:
                 if id_remover == documento['id']:
@@ -169,9 +169,9 @@ def escolher_opcao():
         elif opcao_escolhida == 3:
             buscar_documento()
         elif opcao_escolhida == 4:
-            remover_documento()
-        elif opcao_escolhida == 5:
             atualizar_documento()
+        elif opcao_escolhida == 5:
+            remover_documento()
         elif opcao_escolhida == 6:
             finalizar_sistema()
     except ValueError:

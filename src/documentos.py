@@ -2,24 +2,20 @@ import os
 from auxiliar import (exibir_subtitulo, voltar_ao_menu, sinalizar_sem_documento)
 
 documentos = []
+gerador_id = 1
 
 def cadastrar_documento():
+    global gerador_id
     try:
         exibir_subtitulo('Cᴀᴅᴀsᴛʀᴏ ᴅᴇ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
-        id_doc = int(input('Digite o ID do documento: '))
-        for documento in documentos:
-            if id_doc == documento['id']:
-                print('ID já existe no sistema')
-                voltar_ao_menu()
-                break
-        else:
-            nome_doc = input('Digite o nome do documento: ')
-            tipo_doc = input('Digite o tipo do documento: ')
-            data_doc = input('Digite a data do documento (DD/MM/AAAA): ')
-            dados_documento = {'id' : id_doc, 'nome' : nome_doc, 'tipo' : tipo_doc, 'data' : data_doc}
-            documentos.append(dados_documento)
-            print(f'O documento "{nome_doc}" foi cadastrado!\n')
-            voltar_ao_menu()
+        nome_doc = input('Digite o nome do documento: ')
+        tipo_doc = input('Digite o tipo do documento: ')
+        data_doc = input('Digite a data do documento (DD/MM/AAAA): ')
+        documento = {'id' : gerador_id, 'nome' : nome_doc, 'tipo' : tipo_doc, 'data' : data_doc}
+        documentos.append(documento)
+        print(f'O documento "{nome_doc}" foi cadastrado com o id {gerador_id}!\n')
+        gerador_id += 1
+        voltar_ao_menu()
     except ValueError:
             os.system('cls')
             print("ID inválido!")

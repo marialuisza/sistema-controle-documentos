@@ -23,7 +23,7 @@ def sinalizar_sem_documento():
         print('Nenhum documento cadastrado')
         voltar_ao_menu()
 
-def entrada_vazia():
-    print('\nFalha ao cadastrar documento! Entrada vazia!')
+def entrada_vazia(texto):
+    print(f'{texto}Entrada vazia!')
     voltar_ao_menu()
 

@@ -13,7 +13,7 @@ def cadastrar_documento():
     tipo_doc = input('Digite o tipo do documento: ')
     data = input('Digite a data do documento (DDMMAAAA): ')
     if not nome_doc or not tipo_doc or not data:
-        entrada_vazia()
+        entrada_vazia('\nFalha ao cadastrar documento! ')
         return
     try:
         data_doc = datetime.strptime(data, '%d%m%Y').date()
@@ -36,7 +36,11 @@ def listar_documentos():
             nome_doc = documento['nome']
             id_doc = documento['id']
             tipo_doc = documento['tipo']
-            print(f'- ID: {id_doc} | Documento: {nome_doc} | Tipo: {tipo_doc} | Data: {documento['data'].strftime('%d/%m/%Y')}')
+            print(
+            f"- ID: {str(id_doc).ljust(3)} | "
+            f"Documento: {nome_doc.ljust(20)} | "
+            f"Tipo: {tipo_doc.ljust(10)} | "
+            f"Data: {documento['data'].strftime('%d/%m/%Y')}")        
         voltar_ao_menu()
     
 def buscar_documento():
@@ -54,7 +58,7 @@ def buscar_documento():
                     voltar_ao_menu()
                     break
             if not encontrado:
-                    print('ID inválido!')
+                    print('\nID inválido!')
                     voltar_ao_menu()
         except ValueError:
             os.system('cls')
@@ -102,24 +106,32 @@ def atualizar_documento():
                     atualizar_doc = int(input('Escolha uma opção: '))
                     if atualizar_doc == 1:
                         nome_novo = input('Digite o novo nome: ')
-                        documento['nome'] = nome_novo.title()
-                        print(f'Campo Nome alterado para "{documento["nome"]}" com sucesso!\n')
-                        voltar_ao_menu()
+                        if not nome_novo:
+                            entrada_vazia('\nFalha ao atualizar documento! ')
+                        else:
+                            documento['nome'] = nome_novo.title()
+                            print(f'Campo Nome alterado para "{documento["nome"]}" com sucesso!\n')
+                            voltar_ao_menu()
                     elif atualizar_doc == 2:
                         tipo_novo = input('Digite o novo tipo: ')
-                        documento['tipo'] = tipo_novo.upper()
-                        print(f'Campo Tipo alterado para "{documento["tipo"]}" com sucesso!\n')
-                        voltar_ao_menu()
+                        if not tipo_novo:
+                            entrada_vazia('\nFalha ao atualizar documento! ')
+                        else:
+                            documento['tipo'] = tipo_novo.upper()
+                            print(f'Campo Tipo alterado para "{documento["tipo"]}" com sucesso!\n')
+                            voltar_ao_menu()
                     elif atualizar_doc == 3:
-                        data_atualizada = None
-                        data_nova = input('Digite a nova data: ')
+                        data_nova = input('Digite a nova data (DDMMAAAA): ')
+                        if not data_nova:
+                            entrada_vazia('\nFalha ao atualizar documento! ')
+                            return
                         try:
                             data_atualizada = datetime.strptime(data_nova, '%d%m%Y').date()
+                            documento['data'] = data_atualizada
+                            print(f'Campo Data alterado para "{documento['data'].strftime('%d/%m/%Y')}" com sucesso!\n')
                         except ValueError:
                             print("\nData inválida!")
-                        documento['data'] = data_atualizada
-                        print(f'Campo Data alterado para "{documento['data'].strftime('%d/%m/%Y')}" com sucesso!\n')
-                        voltar_ao_menu()
+                            voltar_ao_menu()
                     else:     
                         os.system('cls')
                         print('Opção inválida!')
@@ -127,9 +139,8 @@ def atualizar_documento():
                     break
             if not encontrado:
                     os.system('cls')
-                    print('ID inválido!')  
-                    voltar_ao_menu()      
+                    print('ID inválido!')
+                    voltar_ao_menu()        
         except ValueError:
             os.system('cls')
-            print('ID inválido!')  
-            voltar_ao_menu()
+            entrada_vazia('Falha ao buscar documento! ')

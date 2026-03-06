@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from auxiliar import (exibir_subtitulo, voltar_ao_menu, sinalizar_sem_documento, entrada_vazia)
+from auxiliar import (exibir_subtitulo, voltar_ao_menu, sinalizar_sem_documento, entrada_vazia, opcao_invalida)
 
 documentos = []
 gerador_id = 1
@@ -28,10 +28,10 @@ def cadastrar_documento():
     voltar_ao_menu() 
 
 def listar_documentos():
+    exibir_subtitulo('Lɪsᴛᴀ ᴅᴇ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
     if not documentos:
         sinalizar_sem_documento()
     else:
-        exibir_subtitulo('Lɪsᴛᴀ ᴅᴇ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
         for documento in documentos:
             nome_doc = documento['nome']
             id_doc = documento['id']
@@ -44,10 +44,10 @@ def listar_documentos():
         voltar_ao_menu()
     
 def buscar_documento():
+    exibir_subtitulo('Bᴜsᴄᴀ ᴅᴇ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
     if not documentos:
         sinalizar_sem_documento()
     else:
-        exibir_subtitulo('Bᴜsᴄᴀ ᴅᴇ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
         try:
             id_busca = int(input('Digite o ID do documento que busca: '))
             encontrado = False
@@ -66,10 +66,10 @@ def buscar_documento():
             voltar_ao_menu()
 
 def remover_documento():
+    exibir_subtitulo('Rᴇᴍᴏᴠᴇʀ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
     if not documentos:
         sinalizar_sem_documento()
     else:
-        exibir_subtitulo('Rᴇᴍᴏᴠᴇʀ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
         try:
             id_remover = int(input('Digite o ID do documento que deseja remover: '))
             encontrado= False
@@ -89,10 +89,10 @@ def remover_documento():
             voltar_ao_menu() 
 
 def atualizar_documento():
+    exibir_subtitulo('Aᴛᴜᴀʟɪᴢᴀʀ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
     if not documentos:
         sinalizar_sem_documento()
     else:
-        exibir_subtitulo('Aᴛᴜᴀʟɪᴢᴀʀ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
         try:
             id_atualizar = int(input('Digite o ID do documento que deseja atualizar: '))
             encontrado = False
@@ -124,14 +124,14 @@ def atualizar_documento():
                         data_nova = input('Digite a nova data (DDMMAAAA): ')
                         if not data_nova:
                             entrada_vazia('\nFalha ao atualizar documento! ')
-                            return
-                        try:
-                            data_atualizada = datetime.strptime(data_nova, '%d%m%Y').date()
-                            documento['data'] = data_atualizada
-                            print(f'Campo Data alterado para "{documento['data'].strftime('%d/%m/%Y')}" com sucesso!\n')
-                        except ValueError:
-                            print("\nData inválida!")
-                            voltar_ao_menu()
+                        else:
+                            try:
+                                data_atualizada = datetime.strptime(data_nova, '%d%m%Y').date()
+                                documento['data'] = data_atualizada
+                                print(f'Campo Data alterado para "{documento['data'].strftime('%d/%m/%Y')}" com sucesso!\n')
+                            except ValueError:
+                                print("\nData inválida!")
+                                voltar_ao_menu()
                     else:     
                         os.system('cls')
                         print('Opção inválida!')
@@ -142,5 +142,4 @@ def atualizar_documento():
                     print('ID inválido!')
                     voltar_ao_menu()        
         except ValueError:
-            os.system('cls')
-            entrada_vazia('Falha ao buscar documento! ')
+            opcao_invalida()

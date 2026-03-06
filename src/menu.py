@@ -26,5 +26,5 @@ def escolher_opcao():
         elif opcao_escolhida == 6:
             finalizar_sistema()
     except ValueError:
-        voltar_ao_menu()
         opcao_invalida()
+        

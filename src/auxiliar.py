@@ -22,3 +22,8 @@ def sinalizar_sem_documento():
         os.system('cls')
         print('Nenhum documento cadastrado')
         voltar_ao_menu()
+
+def entrada_vazia():
+    print('\nFalha ao cadastrar documento! Entrada vazia!')
+    voltar_ao_menu()
+

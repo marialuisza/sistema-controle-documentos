@@ -1,25 +1,31 @@
 import os
-from auxiliar import (exibir_subtitulo, voltar_ao_menu, sinalizar_sem_documento)
+from datetime import datetime
+from auxiliar import (exibir_subtitulo, voltar_ao_menu, sinalizar_sem_documento, entrada_vazia)
 
 documentos = []
 gerador_id = 1
 
 def cadastrar_documento():
     global gerador_id
+    data_doc = None
+    exibir_subtitulo('Cᴀᴅᴀsᴛʀᴏ ᴅᴇ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
+    nome_doc = input('Digite o nome do documento: ')
+    tipo_doc = input('Digite o tipo do documento: ')
+    data = input('Digite a data do documento (DDMMAAAA): ')
+    if not nome_doc or not tipo_doc or not data:
+        entrada_vazia()
+        return
     try:
-        exibir_subtitulo('Cᴀᴅᴀsᴛʀᴏ ᴅᴇ ᴅᴏᴄᴜᴍᴇɴᴛᴏs')
-        nome_doc = input('Digite o nome do documento: ')
-        tipo_doc = input('Digite o tipo do documento: ')
-        data_doc = input('Digite a data do documento (DD/MM/AAAA): ')
-        documento = {'id' : gerador_id, 'nome' : nome_doc, 'tipo' : tipo_doc, 'data' : data_doc}
-        documentos.append(documento)
-        print(f'O documento "{nome_doc}" foi cadastrado com o id {gerador_id}!\n')
-        gerador_id += 1
-        voltar_ao_menu()
+        data_doc = datetime.strptime(data, '%d%m%Y').date()
     except ValueError:
-            os.system('cls')
-            print("ID inválido!")
-            voltar_ao_menu()
+        print("\nData inválida!")
+        voltar_ao_menu()
+        return
+    documento = {'id' : gerador_id, 'nome' : nome_doc.title(), 'tipo' : tipo_doc.upper(), 'data' : data_doc}
+    documentos.append(documento)
+    print(f'\nO documento "{nome_doc.title()}" foi cadastrado com o id {gerador_id}!\n')
+    gerador_id += 1
+    voltar_ao_menu() 
 
 def listar_documentos():
     if not documentos:
@@ -30,8 +36,7 @@ def listar_documentos():
             nome_doc = documento['nome']
             id_doc = documento['id']
             tipo_doc = documento['tipo']
-            data_doc = documento['data']
-            print(f'- ID: {id_doc} | Documento: {nome_doc} | Tipo: {tipo_doc} | Data: {data_doc}')
+            print(f'- ID: {id_doc} | Documento: {nome_doc} | Tipo: {tipo_doc} | Data: {documento['data'].strftime('%d/%m/%Y')}')
         voltar_ao_menu()
     
 def buscar_documento():
@@ -44,7 +49,7 @@ def buscar_documento():
             encontrado = False
             for documento in documentos:
                 if id_busca == documento['id']:
-                    print(f'O ID {id_busca}, refere-se ao documento: {documento["nome"]}')
+                    print(f'- ID: {id_busca} | Documento: {documento["nome"]} | Tipo: {documento["tipo"]} | Data: {documento['data'].strftime('%d/%m/%Y')}')
                     encontrado = True
                     voltar_ao_menu()
                     break
@@ -97,18 +102,23 @@ def atualizar_documento():
                     atualizar_doc = int(input('Escolha uma opção: '))
                     if atualizar_doc == 1:
                         nome_novo = input('Digite o novo nome: ')
-                        documento['nome'] = nome_novo
+                        documento['nome'] = nome_novo.title()
                         print(f'Campo Nome alterado para "{documento["nome"]}" com sucesso!\n')
                         voltar_ao_menu()
                     elif atualizar_doc == 2:
                         tipo_novo = input('Digite o novo tipo: ')
-                        documento['tipo'] = tipo_novo
+                        documento['tipo'] = tipo_novo.upper()
                         print(f'Campo Tipo alterado para "{documento["tipo"]}" com sucesso!\n')
                         voltar_ao_menu()
                     elif atualizar_doc == 3:
+                        data_atualizada = None
                         data_nova = input('Digite a nova data: ')
-                        documento['data'] = data_nova
-                        print(f'Campo Data alterado para "{documento["data"]}" com sucesso!\n')
+                        try:
+                            data_atualizada = datetime.strptime(data_nova, '%d%m%Y').date()
+                        except ValueError:
+                            print("\nData inválida!")
+                        documento['data'] = data_atualizada
+                        print(f'Campo Data alterado para "{documento['data'].strftime('%d/%m/%Y')}" com sucesso!\n')
                         voltar_ao_menu()
                     else:     
                         os.system('cls')
